@@ -1,0 +1,33 @@
+
+version: '3'
+
+services:
+  mybunker:
+    container_name: mybunker
+    image: bunkerity/bunkerweb:1.4.8
+    ports:
+      - 80:8080
+      - 443:8443
+    volumes:
+      - bw-data:/data
+    environment:
+      - SERVER_NAME=mutillidae.exemplo.com bunkerweb.exemplo.com
+      - MULTISITE=yes
+      - USE_REVERSE_PROXY=yes
+      - REVERSE_PROXY_URL=/
+      - mutillidae.bunkerweb.exemplo.com_REVERSE_PROXY_HOST=http://mutillidae
+    networks:
+      - bw-net
+
+  mutillidae:
+    container_name: mutillidae
+    image: citizenstig/nowasp
+    networks:
+      - bw-net
+
+volumes:
+  bw-data:
+
+networks:
+  bw-net:
+    name: bw-net
